@@ -7,6 +7,9 @@
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
 
+  <!-- Google Material Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+
   <!-- Materialize CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 
@@ -16,44 +19,59 @@
       background-color: #f5f5f5;
     }
     nav {
-      background-color: #4285F4; /* Google 蓝 */
+      background-color: #4285F4;
     }
     .card-title {
       font-size: 1.2rem;
       font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
     .download-btn {
-      background-color: #34A853 !important; /* Google 绿 */
+      background-color: #34A853 !important;
     }
     .header-title {
       margin-top: 40px;
       font-weight: 400;
       color: #333;
     }
+    .material-symbols-outlined {
+      font-size: 28px;
+      vertical-align: middle;
+    }
   </style>
 </head>
 
 <body>
 
-  <!-- 顶部导航栏 -->
   <nav>
     <div class="nav-wrapper container">
       <a href="#" class="brand-logo">📁 文件下载中心</a>
     </div>
   </nav>
 
-  <!-- 主内容 -->
   <div class="container">
     <h4 class="center-align header-title">Code 文件夹内容</h4>
     <div id="file-list" class="row"></div>
   </div>
 
-  <!-- Materialize JS -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-
   <script>
+    function getIconByFileType(name) {
+      const ext = name.split('.').pop().toLowerCase();
+
+      if (["png", "jpg", "jpeg", "gif", "bmp", "svg", "webp"].includes(ext)) return "image";
+      if (["mp3", "wav", "ogg", "flac"].includes(ext)) return "audio_file";
+      if (["mp4", "avi", "mov", "mkv", "webm"].includes(ext)) return "movie";
+      if (["zip", "rar", "7z", "tar", "gz"].includes(ext)) return "folder_zip";
+      if (["txt", "md", "json", "xml", "html", "css", "js"].includes(ext)) return "description";
+      if (["exe", "sh", "bat", "bin"].includes(ext)) return "terminal";
+
+      return "insert_drive_file"; // 默认图标
+    }
+
     async function loadFiles() {
-      const repo = "EGGY-XuanQian/eggy-xuanqian.github.io"; // 你的仓库
+      const repo = "EGGY-XuanQian/eggy-xuanqian.github.io";
       const path = "Code";
 
       const response = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`);
@@ -62,13 +80,18 @@
       const list = document.getElementById("file-list");
 
       files.forEach(file => {
+        const icon = getIconByFileType(file.name);
+
         const card = document.createElement("div");
         card.className = "col s12 m6 l4";
 
         card.innerHTML = `
           <div class="card">
             <div class="card-content">
-              <span class="card-title">${file.name}</span>
+              <span class="card-title">
+                <span class="material-symbols-outlined">${icon}</span>
+                ${file.name}
+              </span>
               <p>点击下方按钮下载该文件。</p>
             </div>
             <div class="card-action">
