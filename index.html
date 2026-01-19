@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>文件下载中心</title>
+  <title>Code list</title>
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
@@ -21,6 +21,14 @@
     nav {
       background-color: #4285F4;
     }
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .material-symbols-outlined {
+      font-size: 28px;
+    }
     .card-title {
       font-size: 1.2rem;
       font-weight: 500;
@@ -36,18 +44,18 @@
       font-weight: 400;
       color: #333;
     }
-    .material-symbols-outlined {
-      font-size: 28px;
-      vertical-align: middle;
-    }
   </style>
 </head>
 
 <body>
 
+  <!-- 顶部导航栏（无表情包） -->
   <nav>
     <div class="nav-wrapper container">
-      <a href="#" class="brand-logo">📁 文件下载中心</a>
+      <a href="#" class="brand-logo">
+        <span class="material-symbols-outlined">folder</span>
+        文件下载中心
+      </a>
     </div>
   </nav>
 
@@ -57,6 +65,7 @@
   </div>
 
   <script>
+    // 根据文件类型选择图标
     function getIconByFileType(name) {
       const ext = name.split('.').pop().toLowerCase();
 
@@ -67,10 +76,11 @@
       if (["txt", "md", "json", "xml", "html", "css", "js"].includes(ext)) return "description";
       if (["exe", "sh", "bat", "bin"].includes(ext)) return "terminal";
 
-      return "insert_drive_file"; // 默认图标
+      return "insert_drive_file";
     }
 
     async function loadFiles() {
+      // 你的仓库 + Code 文件夹
       const repo = "EGGY-XuanQian/eggy-xuanqian.github.io";
       const path = "Code";
 
