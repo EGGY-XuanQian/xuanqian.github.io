@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>文件下载中心</title>
 
+  <!-- 自定义字体 -->
   <style>
     @font-face {
       font-family: 'U5Font';
@@ -12,87 +13,195 @@
     }
   </style>
 
+  <!-- 图标 & UI 库 -->
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 
   <style>
+    :root {
+      --bg: #121212;
+      --text: #e0e0e0;
+      --card: #1e1e1e;
+      --nav: #1f1f1f;
+      --accent: #42a5f5;
+      --accent-soft: #90caf9;
+      --btn: #4CAF50;
+    }
+
     body {
       font-family: 'U5Font', sans-serif;
       background-color: var(--bg);
       color: var(--text);
     }
 
-    :root {
-      --bg: #f5f5f5;
-      --text: #222;
-      --card: white;
-      --nav: #4285F4;
-      --btn: #34A853;
+    nav {
+      background-color: var(--nav);
     }
-
-    body.dark {
-      --bg: #121212;
-      --text: #e0e0e0;
-      --card: #1e1e1e;
-      --nav: #1f1f1f;
-      --btn: #4CAF50;
-    }
-
-    nav { background-color: var(--nav); }
 
     .brand-logo {
       display: flex;
       align-items: center;
       gap: 8px;
-      font-size: 1.4rem;
-    }
-
-    .dark-toggle {
-      position: absolute;
-      right: 16px;
-      top: 12px;
-      cursor: pointer;
+      font-size: 1.3rem;
     }
 
     .material-symbols-outlined {
-      font-size: 24px;
+      font-size: 20px;
       vertical-align: middle;
     }
 
-    .card {
-      background-color: var(--card);
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-search {
+      display: flex;
+      align-items: center;
+      background: #2a2a2a;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    .nav-search input {
+      border: none;
+      background: transparent;
+      color: var(--text);
+      margin: 0;
+      padding: 0 4px;
+      height: 28px;
+      font-size: 14px;
+    }
+
+    .nav-search input:focus {
+      outline: none;
+      box-shadow: none;
+    }
+
+    .nav-search .material-symbols-outlined {
+      font-size: 18px;
+      color: var(--accent-soft);
+    }
+
+    .menu-trigger {
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 50%;
+    }
+
+    .menu-trigger:hover {
+      background: #333;
+    }
+
+    .dropdown-content {
+      background: #1f1f1f;
       color: var(--text);
     }
 
-    .card-title {
-      font-size: 1.1rem;
+    .dropdown-content li > a {
+      color: var(--text);
+      font-size: 14px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 6px;
     }
 
-    .download-btn { background-color: var(--btn) !important; }
+    .dropdown-content li > a .material-symbols-outlined {
+      font-size: 18px;
+    }
+
+    .dropdown-content li > a.active-option {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .container h5 {
+      margin-top: 24px;
+      margin-bottom: 16px;
+    }
+
+    /* 文件列表布局 */
+    #file-list {
+      margin-top: 8px;
+      transition: all 0.25s ease-out;
+    }
+
+    #file-list.grid-view {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      grid-gap: 16px;
+    }
+
+    #file-list.list-view {
+      display: block;
+    }
+
+    .file-card {
+      background-color: var(--card);
+      color: var(--text);
+      border-radius: 6px;
+      overflow: hidden;
+      min-height: 120px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+
+    .file-card .card-content {
+      padding: 12px 16px 8px 16px;
+    }
+
+    .file-card .card-action {
+      padding: 8px 16px 12px 16px;
+      border-top: 1px solid #333;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .file-card .card-title {
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .file-card .card-title .material-symbols-outlined {
+      font-size: 16px;
+    }
+
+    .file-card p {
+      margin: 0;
+      font-size: 12px;
+      color: #b0b0b0;
+    }
+
+    .download-btn {
+      background-color: var(--btn) !important;
+      font-size: 12px;
+      padding: 0 12px;
+      height: 26px;
+      line-height: 26px;
+    }
 
     .file-tag {
-      padding: 3px 8px;
-      border-radius: 6px;
-      font-size: 0.8rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 10px;
       color: white;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       display: inline-block;
-    }
-
-    .view-toggle, .sort-toggle {
-      margin-bottom: 20px;
-      text-align: right;
     }
 
     .not-found {
       text-align: center;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       margin-top: 40px;
+      color: #777;
     }
 
     .fade-out {
@@ -114,113 +223,156 @@
       color: var(--text);
       padding: 20px;
     }
+
+    #preview-modal h5 {
+      margin-bottom: 12px;
+    }
+
+    #preview-modal pre {
+      background: #111;
+      padding: 12px;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+
+    @media (max-width: 600px) {
+      .brand-logo {
+        font-size: 1.1rem;
+      }
+      .material-symbols-outlined {
+        font-size: 18px;
+      }
+      .nav-search input {
+        width: 90px;
+      }
+    }
   </style>
 </head>
 
 <body>
 
   <nav>
-    <div class="nav-wrapper container">
+    <div class="nav-wrapper container" style="display:flex;align-items:center;justify-content:space-between;">
       <a href="#" class="brand-logo">
         <span class="material-symbols-outlined">folder</span>
         文件下载中心
       </a>
-      <span class="material-symbols-outlined dark-toggle" onclick="toggleDarkMode()">dark_mode</span>
+
+      <div class="nav-right">
+        <div class="nav-search">
+          <span class="material-symbols-outlined">search</span>
+          <input id="search" type="text" placeholder="搜索文件..." onkeydown="if(event.key==='Enter'){triggerSearch();}">
+        </div>
+
+        <a class="menu-trigger dropdown-trigger" href="#!" data-target="menu-dropdown">
+          <span class="material-symbols-outlined">more_vert</span>
+        </a>
+      </div>
     </div>
   </nav>
 
+  <!-- 三点菜单 -->
+  <ul id="menu-dropdown" class="dropdown-content">
+    <li><a id="opt-grid" href="#!" onclick="setView('grid');setActiveOption('opt-grid');">
+      <span class="material-symbols-outlined">grid_view</span> 网格视图
+    </a></li>
+    <li><a id="opt-list" href="#!" onclick="setView('list');setActiveOption('opt-list');">
+      <span class="material-symbols-outlined">view_agenda</span> 列表视图
+    </a></li>
+    <li class="divider"></li>
+    <li><a id="opt-sort-name" href="#!" onclick="sortFiles('name');setActiveOption('opt-sort-name');">
+      <span class="material-symbols-outlined">sort_by_alpha</span> 按名称排序
+    </a></li>
+    <li><a id="opt-sort-size" href="#!" onclick="sortFiles('size');setActiveOption('opt-sort-size');">
+      <span class="material-symbols-outlined">straighten</span> 按大小排序
+    </a></li>
+    <li><a id="opt-sort-type" href="#!" onclick="sortFiles('type');setActiveOption('opt-sort-type');">
+      <span class="material-symbols-outlined">category</span> 按类型排序
+    </a></li>
+    <li class="divider"></li>
+    <li><a href="#!" onclick="triggerSearch();">
+      <span class="material-symbols-outlined">search</span> 执行搜索
+    </a></li>
+  </ul>
+
   <div class="container">
-
-    <div class="row search-box">
-      <div class="input-field col s9">
-        <input id="search" type="text" placeholder="搜索文件...">
-      </div>
-      <div class="input-field col s3">
-        <button class="btn blue" onclick="triggerSearch()">搜索</button>
-      </div>
-    </div>
-
-    <div class="view-toggle">
-      <a id="btn-grid" class="btn-small blue" onclick="setView('grid')">网格视图</a>
-      <a id="btn-list" class="btn-small blue lighten-2" onclick="setView('list')">列表视图</a>
-    </div>
-
-    <div class="sort-toggle">
-      <a class="btn-small grey" onclick="sortFiles('name')">按名称</a>
-      <a class="btn-small grey" onclick="sortFiles('size')">按大小</a>
-      <a class="btn-small grey" onclick="sortFiles('type')">按类型</a>
-    </div>
-
-    <h5 class="center-align">Code 文件夹内容</h5>
-    <div id="file-list" class="row"></div>
+    <h5>Code 文件夹内容</h5>
+    <div id="file-list" class="grid-view"></div>
     <div id="not-found" class="not-found" style="display:none;">未找到文件</div>
   </div>
 
+  <!-- 文件预览弹窗 -->
   <div id="preview-modal" class="modal">
     <div class="modal-content">
       <h5 id="preview-title"></h5>
       <pre><code id="preview-content"></code></pre>
     </div>
-    <div class="modal-footer">
+    <div class="modal-footer" style="background:#111;">
       <a class="modal-close btn blue">关闭</a>
     </div>
   </div>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   <script>
     let allFiles = [];
     let currentView = 'grid';
     let sortMode = 'name';
 
     document.addEventListener("DOMContentLoaded", () => {
-      loadFiles();
+      M.Dropdown.init(document.querySelectorAll('.dropdown-trigger'), {
+        constrainWidth: false,
+        coverTrigger: false,
+        alignment: 'right'
+      });
       M.Modal.init(document.querySelectorAll('.modal'));
-      if (localStorage.getItem("dark") === "1") document.body.classList.add("dark");
+      setActiveOption('opt-grid');
+      setActiveOption('opt-sort-name');
+      loadFiles();
     });
 
-    function toggleDarkMode() {
-      document.body.classList.toggle("dark");
-      localStorage.setItem("dark", document.body.classList.contains("dark") ? "1" : "0");
+    function setActiveOption(id) {
+      document.querySelectorAll('#menu-dropdown a').forEach(a => {
+        a.classList.remove('active-option');
+      });
+      const el = document.getElementById(id);
+      if (el) el.classList.add('active-option');
     }
 
     function getIconByFileType(name) {
       const ext = name.split('.').pop().toLowerCase();
-      if (["png","jpg","jpeg","gif","svg"].includes(ext)) return "image";
-      if (["mp3","wav"].includes(ext)) return "audio_file";
-      if (["mp4","avi"].includes(ext)) return "movie";
-      if (["zip","rar","7z"].includes(ext)) return "folder_zip";
+      if (["png","jpg","jpeg","gif","svg","webp"].includes(ext)) return "image";
+      if (["mp3","wav","ogg","flac"].includes(ext)) return "audio_file";
+      if (["mp4","avi","mov","mkv","webm"].includes(ext)) return "movie";
+      if (["zip","rar","7z","tar","gz"].includes(ext)) return "folder_zip";
       if (["txt","md","json","xml","py"].includes(ext)) return "description";
       return "insert_drive_file";
     }
 
     function getTagColor(ext) {
-      if (["png","jpg","jpeg","gif","svg"].includes(ext)) return "#1E88E5";
-      if (["zip","rar","7z"].includes(ext)) return "#8E24AA";
+      if (["png","jpg","jpeg","gif","svg","webp"].includes(ext)) return "#1E88E5";
+      if (["zip","rar","7z","tar","gz"].includes(ext)) return "#8E24AA";
       if (["txt","md","json","xml","py"].includes(ext)) return "#43A047";
+      if (["mp4","mov","avi","mkv","webm"].includes(ext)) return "#E53935";
       return "#757575";
     }
 
     function setView(view) {
+      if (currentView === view) return;
       currentView = view;
-
-      document.getElementById("btn-grid").classList.remove("blue");
-      document.getElementById("btn-list").classList.remove("blue");
-
-      if (view === "grid") {
-        document.getElementById("btn-grid").classList.add("blue");
-        document.getElementById("btn-list").classList.add("blue", "lighten-2");
-      } else {
-        document.getElementById("btn-list").classList.add("blue");
-        document.getElementById("btn-grid").classList.add("blue", "lighten-2");
-      }
-
       const list = document.getElementById("file-list");
       list.classList.add("fade-out");
-
       setTimeout(() => {
-        renderFiles(allFiles);
+        if (view === 'grid') {
+          list.classList.remove('list-view');
+          list.classList.add('grid-view');
+        } else {
+          list.classList.remove('grid-view');
+          list.classList.add('list-view');
+        }
+        renderFiles(allFiles, false);
         list.classList.remove("fade-out");
         list.classList.add("fade-in");
-        setTimeout(() => list.classList.remove("fade-in"), 300);
+        setTimeout(() => list.classList.remove("fade-in"), 250);
       }, 150);
     }
 
@@ -229,13 +381,24 @@
       if (mode === "name") allFiles.sort((a,b)=>a.name.localeCompare(b.name));
       if (mode === "size") allFiles.sort((a,b)=>a.size - b.size);
       if (mode === "type") allFiles.sort((a,b)=>a.name.split('.').pop().localeCompare(b.name.split('.').pop()));
-      renderFiles(allFiles);
+      animateRender();
     }
 
     function triggerSearch() {
       const keyword = document.getElementById("search").value.toLowerCase();
       const filtered = allFiles.filter(f => f.name.toLowerCase().includes(keyword));
-      renderFiles(filtered);
+      animateRender(filtered);
+    }
+
+    function animateRender(filesOverride=null) {
+      const list = document.getElementById("file-list");
+      list.classList.add("fade-out");
+      setTimeout(() => {
+        renderFiles(filesOverride || allFiles, false);
+        list.classList.remove("fade-out");
+        list.classList.add("fade-in");
+        setTimeout(() => list.classList.remove("fade-in"), 250);
+      }, 150);
     }
 
     async function loadFiles() {
@@ -247,7 +410,7 @@
       sortFiles("name");
     }
 
-    function renderFiles(files) {
+    function renderFiles(files, doAnim=true) {
       const list = document.getElementById("file-list");
       const notFound = document.getElementById("not-found");
       list.innerHTML = "";
@@ -258,25 +421,23 @@
         const icon = getIconByFileType(file.name);
         const tagColor = getTagColor(ext);
         const sizeKB = (file.size / 1024).toFixed(1);
-
         const downloadURL = `https://github.com/EGGY-XuanQian/eggy-xuanqian.github.io/raw/main/Code/${file.name}`;
 
         const card = document.createElement("div");
-        card.className = currentView === 'list' ? "col s12 list-view" : "col s12 m6 l4";
+        card.className = "card file-card hoverable";
+        card.onclick = () => previewFile(downloadURL, file.name);
 
         card.innerHTML = `
-          <div class="card hoverable" onclick="previewFile('${downloadURL}', '${file.name}')">
-            <div class="card-content">
-              <span class="file-tag" style="background:${tagColor}">${ext.toUpperCase()}</span>
-              <span class="card-title">
-                <span class="material-symbols-outlined">${icon}</span>
-                ${file.name}
-              </span>
-              <p>大小：${sizeKB} KB</p>
+          <div class="card-content">
+            <span class="file-tag" style="background:${tagColor}">${ext.toUpperCase()}</span>
+            <div class="card-title">
+              <span class="material-symbols-outlined">${icon}</span>
+              <span>${file.name}</span>
             </div>
-            <div class="card-action">
-              <a class="btn download-btn" href="${downloadURL}" download onclick="event.stopPropagation()">下载</a>
-            </div>
+            <p>大小：${sizeKB} KB</p>
+          </div>
+          <div class="card-action">
+            <a class="btn download-btn" href="${downloadURL}" download onclick="event.stopPropagation()">下载</a>
           </div>
         `;
 
@@ -287,13 +448,10 @@
     async function previewFile(url, name) {
       const ext = name.split('.').pop().toLowerCase();
       if (!["txt","json","py","md","xml"].includes(ext)) return;
-
       const res = await fetch(url);
       const text = await res.text();
-
       document.getElementById("preview-title").innerText = name;
       document.getElementById("preview-content").innerText = text;
-
       hljs.highlightAll();
       const modal = M.Modal.getInstance(document.getElementById("preview-modal"));
       modal.open();
