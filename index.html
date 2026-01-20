@@ -672,14 +672,17 @@ body {
 }
 .video-player {
   width: 100%;
+  min-height: 400px;
+  aspect-ratio: 16/9;
   border-radius: 8px;
   overflow: hidden;
   background: var(--google-gray-800);
 }
 .video-player video {
   width: 100%;
-  height: auto;
+  height: 100%;
   display: block;
+  object-fit: contain;
 }
 .audio-player {
   display: flex;
@@ -831,6 +834,12 @@ body {
   }
   .preview-modal.audio .preview-content {
     max-width: 90%;
+  }
+  .video-player {
+    min-height: 300px;
+  }
+  .preview-content {
+    max-width: 95%;
   }
 }
 @media (max-width: 440px) {
@@ -1193,20 +1202,28 @@ function showContextMenu(e, file) {
 
   const x = e.clientX;
   const y = e.clientY;
-  
   contextMenu.style.left = `${x}px`;
   contextMenu.style.top = `${y}px`;
-
   const menuRect = contextMenu.getBoundingClientRect();
   const viewportWidth = window.innerWidth;
   const viewportHeight = window.innerHeight;
-  
-  if (menuRect.right > viewportWidth) {
-    contextMenu.style.left = `${x - menuRect.width}px`;
+
+  let finalX = x;
+  if (x + menuRect.width > viewportWidth) {
+    finalX = x - menuRect.width;
+    if (finalX < 0) finalX = 0;
+  } else if (x - menuRect.width < 0) {
+    finalX = x;
   }
-  if (menuRect.bottom > viewportHeight) {
-    contextMenu.style.top = `${y - menuRect.height}px`;
+
+  let finalY = y;
+  if (y + menuRect.height > viewportHeight) {
+    finalY = y - menuRect.height;
+    if (finalY < 0) finalY = 0;
   }
+
+  contextMenu.style.left = `${finalX}px`;
+  contextMenu.style.top = `${finalY}px`;
 
   setTimeout(() => {
     contextMenu.classList.add('show');
@@ -1579,29 +1596,39 @@ function previewCurrentFile() {
         `;
       });
   } else if (videoExts.includes(ext)) {
-    previewBody.innerHTML = `
-      <div class="media-player" id="${playerId}">
-        <div class="video-player">
-          <video src="${currentFile.downloadUrl}" preload="metadata" controlsList="nodownload">您的浏览器不支持视频播放</video>
+    if (window.innerWidth < 768) {
+      previewBody.innerHTML = `
+        <div class="preview-unsupported">
+          <span class="material-symbols-outlined">phone_android</span>
+          <p>移动端暂不支持视频在线预览</p>
+          <button class="retry-btn" onclick="downloadCurrentFile()">直接下载</button>
         </div>
-        <div class="player-controls">
-          <div class="play-pause-btn">
-            <span class="material-symbols-outlined">play_arrow</span>
+      `;
+    } else {
+      previewBody.innerHTML = `
+        <div class="media-player" id="${playerId}">
+          <div class="video-player">
+            <video src="${currentFile.downloadUrl}" preload="metadata" controlsList="nodownload">您的浏览器不支持视频播放</video>
           </div>
-          <div class="progress-container">
-            <span class="progress-time">00:00</span>
-            <div class="progress-bar">
-              <div class="progress-fill"></div>
-              <div class="progress-slider"></div>
+          <div class="player-controls">
+            <div class="play-pause-btn">
+              <span class="material-symbols-outlined">play_arrow</span>
             </div>
-            <span class="progress-time remaining">-00:00</span>
+            <div class="progress-container">
+              <span class="progress-time">00:00</span>
+              <div class="progress-bar">
+                <div class="progress-fill"></div>
+                <div class="progress-slider"></div>
+              </div>
+              <span class="progress-time remaining">-00:00</span>
+            </div>
           </div>
         </div>
-      </div>
-    `;
-    const playerContainer = document.getElementById(playerId);
-    const videoEl = playerContainer.querySelector('video');
-    initMediaPlayer(videoEl, playerContainer, false);
+      `;
+      const playerContainer = document.getElementById(playerId);
+      const videoEl = playerContainer.querySelector('video');
+      initMediaPlayer(videoEl, playerContainer, false);
+    }
   } else if (audioExts.includes(ext)) {
     previewModal.classList.add('audio');
     previewBody.innerHTML = `
